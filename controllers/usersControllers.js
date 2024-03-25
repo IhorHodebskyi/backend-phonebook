@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
-const gavatar = require("gravatar");
+const gravatar = require("gravatar");
 
 const User = require("../db/models/userModel");
 const { ctrlWrapper } = require("../helpers");
@@ -15,7 +15,7 @@ const signup = async (req, res) => {
     res.status(409).json({ message: "Email in use" });
     return;
   }
-  const avatar = gavatar.url(email);
+  const avatar = gravatar.url(email);
   const newUser = new User({ name, email, password, avatar });
   await newUser.hashPassword(password);
   await newUser.save();
