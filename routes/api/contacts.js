@@ -4,11 +4,11 @@ const {
   postContact,
   deleteContact,
   updateContact,
-} = require("../controllers/contactsControllers");
+} = require("../../controllers/contactsControllers");
 const router = express.Router();
-const authenticate = require("../middlewares/authenticate");
-const validateBody = require("../middlewares/validateBody");
-const { addSchema } = require("../schemas/contactsShema");
+const authenticate = require("../../middlewares/authenticate");
+const validateBody = require("../../middlewares/validateBody");
+const { addSchema } = require("../../schemas/contactsShema");
 
 router.get("/", authenticate, getAllContacts);
 
