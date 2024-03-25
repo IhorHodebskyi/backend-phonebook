@@ -1,25 +1,26 @@
 const { Schema, model } = require("mongoose");
+
 const bcrypt = require("bcrypt");
 
-const userShema = new Schema(
+const userSchema = new Schema(
   {
-    name: { type: String, reqired: [true, "put your name"] },
-    email: { type: String, reqired: [true, "put your number"] },
-    password: { type: String, reqired: [true, "put your number"] },
+    name: { type: String, required: [true, "put your name"] },
+    email: { type: String, required: [true, "put your number"] },
+    password: { type: String, required: [true, "put your password"] },
     token: { type: String, default: "" },
     avatar: String,
   },
   { versionKey: false }
 );
 
-userShema.methods.hashPassword = async function (password) {
+userSchema.methods.hashPassword = async function (password) {
   this.password = await bcrypt.hash(password, 10);
 };
 
-userShema.methods.verifyPassword = async function (password) {
+userSchema.methods.verifyPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const User = model("user", userShema);
+const User = model("user", userSchema);
 
 module.exports = User;

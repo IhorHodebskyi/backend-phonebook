@@ -1,33 +1,17 @@
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
-const gravatar = require("gravatar");
 
 const User = require("../db/models/userModel");
 const { ctrlWrapper } = require("../helpers");
+const services = require("../services/authServices");
 
 const { SECRET_KEY } = process.env;
 
-const signup = async (req, res) => {
-  const { name, email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    res.status(409).json({ message: "Email in use" });
-    return;
-  }
-  const avatar = gravatar.url(email);
-  const newUser = new User({ name, email, password, avatar });
-  await newUser.hashPassword(password);
-  await newUser.save();
-
-  const payload = {
-    id: newUser._id,
-  };
-
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(newUser._id, { token });
-
-  res.status(201).json({ token, user: { name, email, avatar } });
+const signUp = async (req, res) => {
+  const { body } = req;
+  const result = await services.signUp(body);
+  res.status(201).json(result);
 };
 
 const login = async (req, res) => {
@@ -82,7 +66,7 @@ const updateAvatar = async (req, res, next) => {
 };
 
 module.exports = {
-  signup: ctrlWrapper(signup),
+  signUp: ctrlWrapper(signUp),
   login,
   logout,
   getCurrent,
