@@ -8,7 +8,7 @@ const userSchema = new Schema(
     email: { type: String, required: [true, "put your number"] },
     password: { type: String, required: [true, "put your password"] },
     token: { type: String, default: "" },
-    avatar: String,
+    avatarURL: String,
   },
   { versionKey: false }
 );

@@ -1,26 +1,22 @@
-const {
-  getContactService,
-  postContactService,
-  deleteContactService,
-  editContactsService,
-} = require("../services/contactsServices");
+const services = require("../services/contactsServices");
+const { ctrlWrapper } = require("../helpers");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const allContacts = await getContactService(owner);
+  const allContacts = await services.getAllContacts(owner);
   res.json(allContacts);
 };
 
 const postContact = async (req, res) => {
   const { _id: owner } = req.user;
   const data = req.body;
-  const contact = await postContactService(owner, data);
+  const contact = await services.postContact(owner, data);
   res.json(contact);
 };
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await deleteContactService(contactId);
+  const result = await services.deleteContact(contactId);
   if (!result) {
     res.status(404).json({ message: "Not found" });
     return;
@@ -35,7 +31,7 @@ const updateContact = async (req, res) => {
     return;
   }
   const data = req.body;
-  const result = await editContactsService(contactId, data);
+  const result = await services.editContacts(contactId, data);
   if (!result) {
     res.status(404).json({ message: "Not found" });
     return;
@@ -44,8 +40,8 @@ const updateContact = async (req, res) => {
 };
 
 module.exports = {
-  getAllContacts,
-  postContact,
-  deleteContact,
-  updateContact,
+  getAllContacts: ctrlWrapper(getAllContacts),
+  postContact: ctrlWrapper(postContact),
+  deleteContact: ctrlWrapper(deleteContact),
+  updateContact: ctrlWrapper(updateContact),
 };
